@@ -7,6 +7,7 @@ const Contact = ({ language }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
   
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,6 +16,7 @@ const Contact = ({ language }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(false);
     
     // Create form data for FormSubmit
     const formDataToSend = new FormData();
@@ -23,21 +25,30 @@ const Contact = ({ language }) => {
     formDataToSend.append('message', formData.message);
     formDataToSend.append('_captcha', 'false');
     formDataToSend.append('_template', 'table');
-    formDataToSend.append('_subject', `New message from ${formData.name}`);
+    formDataToSend.append('_subject', `Portfolio: New message from ${formData.name}`);
+    formDataToSend.append('_replyto', formData.email);
     
     try {
-      const response = await fetch('https://formsubmit.co/noureihoudahenmiled0@gmail.com', {
+      // Use FormSubmit's endpoint with the email in the URL
+      const response = await fetch('https://formsubmit.co/ajax/noureihoudahenmiled0@gmail.com', {
         method: 'POST',
         body: formDataToSend,
       });
       
-      if (response.ok) {
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
         setSubmitted(true);
         setFormData({ name: '', email: '', message: '' });
         setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        setError(true);
+        setTimeout(() => setError(false), 5000);
       }
     } catch (error) {
       console.error('Error sending message:', error);
+      setError(true);
+      setTimeout(() => setError(false), 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -52,7 +63,8 @@ const Contact = ({ language }) => {
       message: "Message",
       send: "Send Message",
       sending: "Sending...",
-      sent: "Message sent!",
+      sent: "Message sent! I'll get back to you soon.",
+      error: "Something went wrong. Please try again or email me directly.",
     },
     fr: {
       title: "Travaillons Ensemble",
@@ -62,7 +74,8 @@ const Contact = ({ language }) => {
       message: "Message",
       send: "Envoyer",
       sending: "Envoi en cours...",
-      sent: "Message envoyé !",
+      sent: "Message envoyé ! Je vous répondrai bientôt.",
+      error: "Une erreur est survenue. Veuillez réessayer ou m'envoyer un email directement.",
     },
   };
   
@@ -138,21 +151,41 @@ const Contact = ({ language }) => {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center text-[#0066ff] text-sm"
+              className="text-center text-[#0066ff] text-sm p-4 bg-[#0066ff]/5 rounded-lg"
             >
               {c.sent}
             </motion.div>
           )}
+          
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center text-red-500 text-sm p-4 bg-red-50 rounded-lg"
+            >
+              {c.error}
+            </motion.div>
+          )}
         </motion.form>
         
-        {/* Contact Info with Blue Abstract Icons */}
+        {/* Alternative direct email contact */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.4, duration: 0.6 }}
           className="text-center mt-12 pt-8 border-t border-[#1a1a1a]/10"
         >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+          <p className="text-sm text-[#1a1a1a]/40 mb-4">
+            {language === 'en' ? 'Or reach me directly at:' : 'Ou contactez-moi directement à :'}
+          </p>
+          <a 
+            href="mailto:noureihoudahenmiled0@gmail.com"
+            className="text-[#0066ff] hover:text-[#0066ff]/80 transition-colors text-lg font-medium"
+          >
+            noureihoudahenmiled0@gmail.com
+          </a>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-8">
             {/* Location */}
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#0066ff]/10 flex items-center justify-center">
@@ -162,18 +195,6 @@ const Contact = ({ language }) => {
                 </svg>
               </div>
               <span className="text-sm text-[#1a1a1a]/60">Paris, France</span>
-            </div>
-            
-            {/* Email */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#0066ff]/10 flex items-center justify-center">
-                <svg className="w-5 h-5 text-[#0066ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <a href="mailto:noureihoudahenmiled0@gmail.com" className="text-sm text-[#1a1a1a]/60 hover:text-[#0066ff] transition-colors">
-                noureihoudahenmiled0@gmail.com
-              </a>
             </div>
             
             {/* Phone */}
