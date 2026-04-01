@@ -6,21 +6,41 @@ const Contact = ({ language }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const form = e.target;
-    fetch('https://formsubmit.co/noureihoudahenmiled0@gmail.com', {
-      method: 'POST',
-      body: new FormData(form),
-    });
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
-    setFormData({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+    
+    // Create form data for FormSubmit
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('message', formData.message);
+    formDataToSend.append('_captcha', 'false');
+    formDataToSend.append('_template', 'table');
+    formDataToSend.append('_subject', `New message from ${formData.name}`);
+    
+    try {
+      const response = await fetch('https://formsubmit.co/noureihoudahenmiled0@gmail.com', {
+        method: 'POST',
+        body: formDataToSend,
+      });
+      
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setSubmitted(false), 5000);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   const content = {
@@ -31,6 +51,7 @@ const Contact = ({ language }) => {
       email: "Email",
       message: "Message",
       send: "Send Message",
+      sending: "Sending...",
       sent: "Message sent!",
     },
     fr: {
@@ -40,6 +61,7 @@ const Contact = ({ language }) => {
       email: "Email",
       message: "Message",
       send: "Envoyer",
+      sending: "Envoi en cours...",
       sent: "Message envoyé !",
     },
   };
@@ -68,9 +90,6 @@ const Contact = ({ language }) => {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_template" value="table" />
-          
           <div>
             <label className="block text-sm uppercase tracking-wider mb-2 text-[#1a1a1a]">{c.name}</label>
             <input
@@ -109,9 +128,10 @@ const Contact = ({ language }) => {
           
           <button
             type="submit"
-            className="btn-primary w-full"
+            disabled={isSubmitting}
+            className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {c.send}
+            {isSubmitting ? c.sending : c.send}
           </button>
           
           {submitted && (
@@ -125,15 +145,49 @@ const Contact = ({ language }) => {
           )}
         </motion.form>
         
+        {/* Contact Info with Blue Abstract Icons */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-center mt-12 text-[#1a1a1a]/40 text-sm"
+          className="text-center mt-12 pt-8 border-t border-[#1a1a1a]/10"
         >
-          <p>📍 Paris, France</p>
-          <p>📧 noureihoudahenmiled0@gmail.com</p>
-          <p>📱 +33 771 41 9585</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+            {/* Location */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#0066ff]/10 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#0066ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <span className="text-sm text-[#1a1a1a]/60">Paris, France</span>
+            </div>
+            
+            {/* Email */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#0066ff]/10 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#0066ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <a href="mailto:noureihoudahenmiled0@gmail.com" className="text-sm text-[#1a1a1a]/60 hover:text-[#0066ff] transition-colors">
+                noureihoudahenmiled0@gmail.com
+              </a>
+            </div>
+            
+            {/* Phone */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#0066ff]/10 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#0066ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              </div>
+              <a href="tel:+33771419585" className="text-sm text-[#1a1a1a]/60 hover:text-[#0066ff] transition-colors">
+                +33 771 41 9585
+              </a>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

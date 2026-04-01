@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const Cursor = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
   const [trail, setTrail] = useState([]);
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
@@ -10,7 +11,27 @@ const Cursor = () => {
   
   const trailWords = ["RADIO", "PLANNING", "MEDIA", "M6", "HAVAS", "TV", "AUDIENCE", "CAMPAIGN"];
   
+  // Check if device is desktop (not mobile)
   useEffect(() => {
+    const checkDevice = () => {
+      const isDesktopDevice = window.innerWidth >= 768 && !('ontouchstart' in window);
+      setIsDesktop(isDesktopDevice);
+      
+      // Reset cursor style for mobile
+      if (!isDesktopDevice) {
+        document.body.style.cursor = 'auto';
+      }
+    };
+    
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+  
+  useEffect(() => {
+    if (!isDesktop) return;
+    
     let lastTime = 0;
     const interval = 60;
     
@@ -30,14 +51,19 @@ const Cursor = () => {
     
     window.addEventListener('mousemove', moveCursor);
     return () => window.removeEventListener('mousemove', moveCursor);
-  }, [cursorX, cursorY]);
+  }, [isDesktop, cursorX, cursorY]);
   
   useEffect(() => {
+    if (!isDesktop) return;
+    
     const interval = setInterval(() => {
       setTrail(prev => prev.map(p => ({ ...p, opacity: p.opacity - 0.02 })).filter(p => p.opacity > 0));
     }, 40);
     return () => clearInterval(interval);
-  }, []);
+  }, [isDesktop]);
+  
+  // Don't render anything on mobile
+  if (!isDesktop) return null;
   
   return (
     <>

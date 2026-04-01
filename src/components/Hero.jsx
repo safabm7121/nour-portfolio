@@ -22,7 +22,7 @@ const Hero = ({ language }) => {
   const c = content[language];
   
   return (
-    <section className="min-h-screen flex items-center bg-white">
+    <section className="min-h-screen flex items-center bg-white pt-24 md:pt-0">
       <div className="container-custom w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Text */}
@@ -47,7 +47,7 @@ const Hero = ({ language }) => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight mb-4 text-[#1a1a1a]"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight mb-4 text-[#1a1a1a]"
             >
               {c.name}
             </motion.h1>
@@ -56,7 +56,7 @@ const Hero = ({ language }) => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-2xl md:text-3xl font-light text-[#1a1a1a]/60 mb-6"
+              className="text-xl sm:text-2xl md:text-3xl font-light text-[#1a1a1a]/60 mb-6"
             >
               {c.title}
             </motion.h2>
@@ -65,7 +65,7 @@ const Hero = ({ language }) => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-lg text-[#1a1a1a]/50 max-w-md mb-10"
+              className="text-base sm:text-lg text-[#1a1a1a]/50 max-w-md mb-10"
             >
               {c.description}
             </motion.p>
