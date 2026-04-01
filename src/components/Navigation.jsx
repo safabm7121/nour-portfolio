@@ -41,7 +41,7 @@ const Navigation = ({ language, setLanguage }) => {
               whileHover={{ scale: 1.02 }}
               className="text-xl md:text-2xl font-medium tracking-tight transition-colors text-[#0066ff] md:text-[#1a1a1a] hover:text-[#0066ff]"
             >
-              NB
+              NBM
             </motion.div>
           </Link>
           
