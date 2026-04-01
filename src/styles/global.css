@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    cursor: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-family: 'Geist', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  .container-custom {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .container-custom {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .container-custom {
+      padding-left: 6rem;
+      padding-right: 6rem;
+    }
+  }
+  
+  /* Buttons - Blue on hover */
+  .btn-primary {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    background: transparent;
+    color: #1a1a1a;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0066ff;
+    color: #ffffff;
+    border-color: #0066ff;
+  }
+  
+  /* Navigation links - Blue on hover */
+  .nav-link {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+    color: rgba(26, 26, 26, 0.6);
+  }
+  
+  .nav-link:hover,
+  .nav-link.active {
+    color: #0066ff;
+  }
+  
+  /* Skill tags - Blue on hover */
+  .skill-tag {
+    padding: 0.5rem 1rem;
+    background-color: #f5f5f5;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    cursor: default;
+    color: #1a1a1a;
+  }
+  
+  .skill-tag:hover {
+    border-color: #0066ff;
+    color: #0066ff;
+    background-color: #ffffff;
+  }
+  
+  /* Experience items - Blue border on hover */
+  .experience-item {
+    border-left: 2px solid rgba(0, 102, 255, 0.2);
+    padding-left: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .experience-item:hover {
+    border-left-color: #0066ff;
+  }
+  
+  .experience-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #1a1a1a;
+  }
+  
+  .experience-company {
+    color: #0066ff;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Education cards - Blue accent */
+  .education-card {
+    background-color: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .education-card:hover {
+    background-color: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .education-year {
+    color: #0066ff;
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+  
+  /* Contact form inputs - Blue focus */
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+    color: #1a1a1a;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: #0066ff;
+    background-color: #ffffff;
+  }
+  
+  /* Project cards - Blue title on hover */
+  .project-card {
+    cursor: pointer;
+  }
+  
+  .project-image {
+    width: 100%;
+    height: 20rem;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: all 0.7s ease;
+  }
+  
+  .project-card:hover .project-image {
+    filter: grayscale(0%);
+    transform: scale(1.02);
+  }
+  
+  .project-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    color: #1a1a1a;
+  }
+  
+  .project-card:hover .project-title {
+    color: #0066ff;
+  }
+  
+  /* Language progress bars - Blue */
+  .progress-bar {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 9999px;
+    height: 0.25rem;
+  }
+  
+  .progress-fill {
+    background-color: #0066ff;
+    height: 0.25rem;
+    border-radius: 9999px;
+  }
+  
+  /* Section titles */
+  .section-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #1a1a1a;
+  }
+  
+  @media (min-width: 768px) {
+    .section-title {
+      font-size: 3rem;
+    }
+  }
+  
+  /* Section headers */
+  .section-header {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(26, 26, 26, 0.5);
+    margin-bottom: 1rem;
+  }
+  
+  /* Blue underline */
+  .blue-underline {
+    width: 5rem;
+    height: 0.25rem;
+    background-color: #0066ff;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
