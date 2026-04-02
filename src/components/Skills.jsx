@@ -43,7 +43,7 @@ const Skills = ({ language }) => {
         en: "Resident and visitor welcome, package and mail management, badge management, event coordination.",
         fr: "Accueil résidents et visiteurs, gestion des colis et courriers, gestion des badges, coordination événementielle."
       },
-      image: "https://images.unsplash.com/photo-1556742393-d75f468bfcb0?w=800",
+      image: "https://media.licdn.com/dms/image/v2/D5622AQH3NN-MRFizcw/feedshare-shrink_800/feedshare-shrink_800/0/1733498978071?e=2147483647&v=beta&t=VlHozAZ1n0UxvRp0utvvqduBFoAbI2skErOn29CcJYA",
       behindScene: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=800"
     },
     {
@@ -56,7 +56,7 @@ const Skills = ({ language }) => {
         en: "Logistics coordination, model coordination, technical setup and event execution.",
         fr: "Coordination logistique, coordination des mannequins, mise en place technique et déroulement du défilé."
       },
-      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800",
+      image: "https://i.postimg.cc/zfj9ShQK/74.jpg",
       behindScene: "https://images.unsplash.com/photo-1533009199272-35f2b5ce8f9c?w=800"
     },
     {
@@ -69,7 +69,7 @@ const Skills = ({ language }) => {
         en: "Internal communication (mailing), social media monitoring, social media planning.",
         fr: "Communication interne (mailing), suivi des mentions sur les réseaux, planification social media."
       },
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800",
+      image: "https://lh3.googleusercontent.com/p/AF1QipMpaNAT1J3rd6CEeijtA8suhaPYURqy4YvlCccB=s1360-w1360-h1020-rw",
       behindScene: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800"
     },
     {
@@ -82,7 +82,7 @@ const Skills = ({ language }) => {
         en: "Social media caption writing, brainstorming and event planning (Christmas market, Valentine's Day, etc.).",
         fr: "Rédaction des légendes pour les réseaux, brainstorming et planification des événements (marché de Noël, Saint-Valentin, etc.)."
       },
-      image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=800",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUKuWTh3uSqCvVbNW2VW21dcTG9Qarin4gJg&s",
       behindScene: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800"
     },
     {
@@ -95,7 +95,7 @@ const Skills = ({ language }) => {
         en: "Project brainstorming (Project: BASMA), competitive monitoring, content creation.",
         fr: "Brainstorming projet (Projet: BASMA), veille concurrentielle, création de contenu."
       },
-      image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800",
+      image: "https://www.tustex.com/sites/default/files//styles/large/public/field/image/encatus.jpg?itok=Binyty9n",
       behindScene: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800"
     }
   ];

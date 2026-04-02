@@ -22,28 +22,28 @@ const WorkGrid = ({ language }) => {
       title: { en: "Offer Optimization Manager", fr: "Chargée de l'optimisation de l'offre" },
       company: "M6 Publicité",
       period: "Juin 2025 - Août 2025",
-      image: "https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=800",
+      image: "https://media.lesechos.com/api/v1/images/view/617826853e45460c046d8e26/1280x720/070198636623-web-tete.jpg",
     },
     {
       id: 2,
       title: { en: "Radio Planning Manager", fr: "Chargée de Planning - RADIO" },
       company: "M6 Publicité",
       period: "Nov 2024 - Avr 2025",
-      image: "https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=800",
+      image: "https://www.cbnews.fr/sites/cbnews.fr/files/styles/panoramic_w1200/public/images/m6pub-218143.jpg?itok=KwJv-OD8",
     },
     {
       id: 3,
       title: { en: "Media Assistant", fr: "Assistante chargée média" },
       company: "Havas Media",
       period: "Fév 2024 - Août 2024",
-      image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800",
+      image: "https://www.jggroup.com/sites/default/files/slide/7havas.jpg",
     },
     {
       id: 4,
       title: { en: "Junior Trader", fr: "Trader Junior" },
       company: "STB Tunis",
       period: "Juil 2021 - Août 2021",
-      image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800",
+      image: "https://kapitalis.com/tunisie/wp-content/uploads/2023/01/STB-Bank.jpg",
     },
   ];
   

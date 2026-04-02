@@ -1,15 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
+
+// Import HAVAS images and video
+import HAVAS from '../assets/images/HAVAS.JPEG';
+import havas1 from '../assets/images/havas1.JPEG';
+import videohavas from '../assets/video/videohavas.MOV';
 
 const ProjectDetail = ({ language }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
+  const videoRef = useRef(null);
   
   const dragX = useMotionValue(0);
   const springX = useSpring(dragX, { stiffness: 300, damping: 30 });
   const opacity = useTransform(springX, [-200, 0, 200], [0, 1, 0]);
+  
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }, []);
   
   // Enable scrolling on body when component mounts
   useEffect(() => {
@@ -23,6 +36,31 @@ const ProjectDetail = ({ language }) => {
       document.documentElement.style.overflow = '';
     };
   }, []);
+  
+  // Autoplay video when it comes into view
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            videoElement.play().catch(e => console.log('Autoplay prevented:', e));
+          } else {
+            videoElement.pause();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    
+    observer.observe(videoElement);
+    
+    return () => {
+      if (videoElement) observer.unobserve(videoElement);
+    };
+  }, [project]);
   
   useEffect(() => {
     const projects = {
@@ -56,14 +94,13 @@ const ProjectDetail = ({ language }) => {
         title: { en: "Media Assistant", fr: "Assistante chargée média" },
         company: "Havas Media",
         period: "Fév 2024 - Août 2024",
+        location: "Lyon, France",
         description: {
-          en: "Media consumption analysis and competitive monitoring. Strategic recommendations for key clients.",
-          fr: "Analyses de la consommation média et veilles concurrentielles. Recommandations stratégiques pour les clients clés."
+          en: "Media consumption analysis and competitive monitoring (quantitative & qualitative). Participation in end-of-campaign reports. Strategic recommendations for: Groupe Naos, Les 2 Alpes, B&B Hôtels. Development of cross-channel media consulting skills (TV, radio, digital, print, DOOH).",
+          fr: "Analyses de la consommation média et veilles concurrentielles (piges quantitatives & qualitatives). Participation à l'élaboration de bilans de fin de campagne. Recommandations stratégiques pour : Groupe Naos, Les 2 Alpes, B&B Hôtels. Développement de compétences en conseil média cross-canal (TV, radio, digital, print, DOOH)."
         },
-        images: [
-          "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200",
-          "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1200",
-        ]
+        images: [HAVAS, havas1],
+        video: videohavas,
       },
       4: {
         title: { en: "Junior Trader", fr: "Trader Junior" },
@@ -90,9 +127,11 @@ const ProjectDetail = ({ language }) => {
   
   if (!project) return null;
   
+  const hasVideo = project.video;
+  
   return (
     <div className="min-h-screen bg-white overflow-y-auto">
-      {/* Close Button - Sticky so it stays visible while scrolling */}
+      {/* Close Button */}
       <div className="sticky top-6 z-50 flex justify-end px-6 pointer-events-none">
         <button
           onClick={() => navigate('/')}
@@ -104,7 +143,7 @@ const ProjectDetail = ({ language }) => {
         </button>
       </div>
       
-      {/* Draggable Content - Only the images area is draggable */}
+      {/* Draggable Content */}
       <motion.div
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
@@ -114,7 +153,7 @@ const ProjectDetail = ({ language }) => {
         className="pt-20 pb-32"
       >
         <div className="container-custom">
-          {/* Images */}
+          {/* Images only (no video at top) */}
           <div className="grid gap-8 mb-12 max-w-4xl mx-auto">
             {project.images.map((img, idx) => (
               <motion.div
@@ -126,7 +165,7 @@ const ProjectDetail = ({ language }) => {
               >
                 <img
                   src={img}
-                  alt={project.title[language]}
+                  alt={`${project.title[language]} - image ${idx + 1}`}
                   className="w-full object-cover"
                 />
               </motion.div>
@@ -134,18 +173,58 @@ const ProjectDetail = ({ language }) => {
           </div>
           
           {/* Text Content */}
-          <div className="text-center max-w-3xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16">
             <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-4 text-[#1a1a1a]">
               {project.title[language]}
             </h1>
             <p className="text-[#0066ff] text-lg mb-4">{project.company} • {project.period}</p>
+            {project.location && (
+              <p className="text-[#1a1a1a]/50 mb-4">{project.location}</p>
+            )}
             <p className="text-[#1a1a1a]/60 text-lg leading-relaxed">
               {project.description[language]}
             </p>
           </div>
           
+          {/* Video at the bottom - smaller size, autoplay, no sound */}
+          {hasVideo && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="max-w-2xl mx-auto"
+            >
+              <p className="text-sm uppercase tracking-wider text-[#0066ff] mb-4 text-center">
+                {language === 'en' ? 'Behind the Scenes' : 'Dans les Coulisses'}
+              </p>
+              <div className="relative overflow-hidden rounded-xl bg-[#f5f5f5] shadow-md">
+                <video
+                  ref={videoRef}
+                  src={project.video}
+                  poster={project.images[0]}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full max-h-[400px] object-cover"
+                />
+                {/* Play/Pause overlay on hover */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/20">
+                  <div className="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-[#0066ff] ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <p className="text-center text-[#1a1a1a]/40 text-xs mt-3">
+                {language === 'en' ? 'Video loop - no sound' : 'Vidéo en boucle - sans son'}
+              </p>
+            </motion.div>
+          )}
+          
           <p className="text-center text-[#1a1a1a]/30 text-sm mt-12">
-            {language === 'en' ? '← Drag images horizontally to close →' : '← Glissez les images horizontalement pour fermer →'}
+            {language === 'en' ? '← Drag horizontally to close →' : '← Glissez horizontalement pour fermer →'}
           </p>
         </div>
       </motion.div>

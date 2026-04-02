@@ -2,12 +2,21 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
+// Import LA FLAMME images (all 6)
+import laflamme1 from '../assets/images/laflamme1.JPEG';
+import laflamme2 from '../assets/images/laflamme2.JPEG';
+import laflamme3 from '../assets/images/laflamme3.JPEG';
+import laflamme4 from '../assets/images/laflamme4.jpg';
+import laflamme5 from '../assets/images/laflamme5.JPEG';
+import laflamme6 from '../assets/images/laflamme6.JPG';
+
 const ExtraDetail = ({ language }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [experience, setExperience] = useState(null);
   
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (location.state?.experience) {
       setExperience(location.state.experience);
     } else {
@@ -16,6 +25,12 @@ const ExtraDetail = ({ language }) => {
   }, [location, navigate]);
   
   if (!experience) return null;
+  
+  // Check if it's LA FLAMME (id 3)
+  const isLaFlamme = experience.id === 3;
+  
+  // All LA FLAMME images
+  const laFlammeImages = [laflamme1, laflamme2, laflamme3, laflamme4, laflamme5, laflamme6];
   
   return (
     <div className="min-h-screen bg-white overflow-y-auto">
@@ -32,31 +47,60 @@ const ExtraDetail = ({ language }) => {
       </div>
       
       <div className="container-custom py-12">
-        {/* Main Image */}
-        <div className="relative overflow-hidden rounded-xl bg-[#f5f5f5] mb-8 max-w-4xl mx-auto">
-          <img
-            src={experience.image}
-            alt={experience.title[language]}
-            className="w-full object-cover"
-          />
+        {/* Main Images - Multiple for LA FLAMME */}
+        <div className="mb-8 max-w-4xl mx-auto">
+          {isLaFlamme ? (
+            <>
+              <p className="text-sm uppercase tracking-wider text-[#0066ff] mb-6">
+                {language === 'en' ? 'Gallery' : 'Galerie'}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {laFlammeImages.map((img, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="relative overflow-hidden rounded-xl bg-[#f5f5f5]"
+                  >
+                    <img
+                      src={img}
+                      alt={`LA FLAMME Paris - Communication Assistant ${idx + 1}`}
+                      className="w-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="relative overflow-hidden rounded-xl bg-[#f5f5f5]">
+              <img
+                src={experience.image}
+                alt={experience.title[language]}
+                className="w-full object-cover"
+              />
+            </div>
+          )}
         </div>
         
-        {/* Behind the Scene Image */}
-        <div className="mb-8 max-w-4xl mx-auto">
-          <p className="text-sm uppercase tracking-wider text-[#0066ff] mb-4">
-            {language === 'en' ? 'Behind the Scenes' : 'Dans les Coulisses'}
-          </p>
-          <div className="relative overflow-hidden rounded-xl bg-[#f5f5f5]">
-            <img
-              src={experience.behindScene}
-              alt={`Behind the scenes - ${experience.title[language]}`}
-              className="w-full object-cover"
-            />
+        {/* Behind the Scene Image (for non-LA FLAMME items) */}
+        {experience.behindScene && !isLaFlamme && (
+          <div className="mb-8 max-w-4xl mx-auto">
+            <p className="text-sm uppercase tracking-wider text-[#0066ff] mb-4">
+              {language === 'en' ? 'Behind the Scenes' : 'Dans les Coulisses'}
+            </p>
+            <div className="relative overflow-hidden rounded-xl bg-[#f5f5f5]">
+              <img
+                src={experience.behindScene}
+                alt={`Behind the scenes - ${experience.title[language]}`}
+                className="w-full object-cover"
+              />
+            </div>
           </div>
-        </div>
+        )}
         
         {/* Text Content */}
-        <div className="text-center max-w-3xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mt-12">
           <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-4 text-[#1a1a1a]">
             {experience.title[language]}
           </h1>
