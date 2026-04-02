@@ -8,6 +8,8 @@ import WorkGrid from './components/WorkGrid';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
 import ProjectDetail from './pages/ProjectDetail';
+import ExtraDetail from './pages/ExtraDetail';
+import ScrollToTop from './components/ScrollToTop';
 
 function AppContent() {
   const [language, setLanguage] = useState('fr');
@@ -15,6 +17,7 @@ function AppContent() {
   
   return (
     <Layout>
+      <ScrollToTop />
       <Navigation language={language} setLanguage={setLanguage} />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
@@ -29,7 +32,7 @@ function AppContent() {
           <Route path="/about" element={
             <>
               <div className="pt-32 min-h-screen container-custom">
-                <h1 className="text-6xl font-display font-bold mb-8">About</h1>
+                <h1 className="text-6xl font-bold mb-8">About</h1>
                 <Skills language={language} />
               </div>
             </>
@@ -42,6 +45,7 @@ function AppContent() {
             </>
           } />
           <Route path="/project/:id" element={<ProjectDetail language={language} />} />
+          <Route path="/extra/:id" element={<ExtraDetail language={language} />} />
         </Routes>
       </AnimatePresence>
     </Layout>

@@ -1,8 +1,29 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Skills = ({ language }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [hoveredExp, setHoveredExp] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  // Create separate inView observers for each extra experience image
+  const [expRefs, setExpRefs] = useState([]);
+  const [expInViews, setExpInViews] = useState([]);
+  
+  useEffect(() => {
+    setExpRefs(expRefs => Array(extraExp.length).fill().map((_, i) => expRefs[i] || null));
+  }, []);
   
   const skills = [
     "T-REX", "Hubspot", "Mxplorer", "Power BI", "Salesforce",
@@ -10,35 +31,106 @@ const Skills = ({ language }) => {
     "AdExpress", "Pack Office", "Mediapilot"
   ];
   
+  // Extra Experience with behind-the-scenes images
   const extraExp = [
     {
+      id: 1,
       title: { en: "Welcome Host", fr: "Hôtesse d'accueil" },
       company: "Welcome at work!",
       period: "Jan 2026 - Present",
-      location: "Paris, France"
+      location: "Paris, France",
+      description: {
+        en: "Resident and visitor welcome, package and mail management, badge management, event coordination.",
+        fr: "Accueil résidents et visiteurs, gestion des colis et courriers, gestion des badges, coordination événementielle."
+      },
+      image: "https://images.unsplash.com/photo-1556742393-d75f468bfcb0?w=800",
+      behindScene: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=800"
     },
     {
+      id: 2,
       title: { en: "Logistics Assistant", fr: "Aide logistique" },
       company: "voidstone Fashion Show",
       period: "Sept 2025 - Oct 2025",
-      location: "Paris, France"
+      location: "Paris, France",
+      description: {
+        en: "Logistics coordination, model coordination, technical setup and event execution.",
+        fr: "Coordination logistique, coordination des mannequins, mise en place technique et déroulement du défilé."
+      },
+      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800",
+      behindScene: "https://images.unsplash.com/photo-1533009199272-35f2b5ce8f9c?w=800"
     },
     {
+      id: 3,
       title: { en: "Communication Assistant", fr: "Assistante en communication" },
       company: "LA FLAMME paris",
       period: "Avr 2023 - Sept 2023",
-      location: "Tunis, Tunisie"
+      location: "Tunis, Tunisie",
+      description: {
+        en: "Internal communication (mailing), social media monitoring, social media planning.",
+        fr: "Communication interne (mailing), suivi des mentions sur les réseaux, planification social media."
+      },
+      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800",
+      behindScene: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800"
     },
     {
+      id: 4,
       title: { en: "Community Manager", fr: "Community Manager" },
       company: "TUNIVISION IHET",
       period: "Jan 2021 - Août 2021",
-      location: "Tunis, Tunisie"
+      location: "Tunis, Tunisie",
+      description: {
+        en: "Social media caption writing, brainstorming and event planning (Christmas market, Valentine's Day, etc.).",
+        fr: "Rédaction des légendes pour les réseaux, brainstorming et planification des événements (marché de Noël, Saint-Valentin, etc.)."
+      },
+      image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=800",
+      behindScene: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800"
     },
     {
+      id: 5,
       title: { en: "Project Manager", fr: "Chef de projet" },
       company: "ENACTUS",
       period: "Oct 2019 - Août 2020",
+      location: "Tunis, Tunisie",
+      description: {
+        en: "Project brainstorming (Project: BASMA), competitive monitoring, content creation.",
+        fr: "Brainstorming projet (Projet: BASMA), veille concurrentielle, création de contenu."
+      },
+      image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800",
+      behindScene: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800"
+    }
+  ];
+  
+  // Education from PDF
+  const education = [
+    { 
+      degree: "Master 2 Manager de la Communication", 
+      school: "Sup de Com Lyon", 
+      year: "2024",
+      location: "Lyon, France"
+    },
+    { 
+      degree: "Master 1 Marketing Digital & analyse de données", 
+      school: "ESB Lyon - Esprit School of Business", 
+      year: "2023",
+      location: "Lyon, France"
+    },
+    { 
+      degree: "Licence en Science de gestion - spécialité FINANCE", 
+      school: "IHET - Institut des Hautes Etudes de Tunis", 
+      year: "2022",
+      location: "Tunis, Tunisie"
+    },
+    { 
+      degree: "Formation Marketing Digital", 
+      school: "GoMyCode", 
+      year: "2021",
+      location: "Tunis, Tunisie",
+      duration: "3 mois"
+    },
+    { 
+      degree: "Baccalauréat en MATHÉMATIQUES", 
+      school: "Rue de Marseille", 
+      year: "2019",
       location: "Tunis, Tunisie"
     }
   ];
@@ -107,7 +199,7 @@ const Skills = ({ language }) => {
             </div>
           </motion.div>
           
-          {/* Right Column - Extra Experience */}
+          {/* Right Column - Extra Experience with Behind Scene Images */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -116,25 +208,50 @@ const Skills = ({ language }) => {
             <h2 className="section-title">
               {language === 'en' ? 'Extra Experience' : 'Expériences Complémentaires'}
             </h2>
-            <div className="space-y-6">
-              {extraExp.map((exp, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: idx * 0.1, duration: 0.4 }}
-                  className="experience-item"
-                >
-                  <h3 className="experience-title">
-                    {exp.title[language]}
-                  </h3>
-                  <p className="experience-company">{exp.company}</p>
-                  <div className="flex gap-4 text-sm text-[#1a1a1a]/50">
-                    <span>{exp.period}</span>
-                    <span>{exp.location}</span>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="space-y-8">
+              {extraExp.map((exp, idx) => {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const [imgRef, imgInView] = useInView({ triggerOnce: true, threshold: 0.3 });
+                
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: idx * 0.1, duration: 0.4 }}
+                    className="experience-item group cursor-pointer"
+                    onMouseEnter={() => setHoveredExp(exp.id)}
+                    onMouseLeave={() => setHoveredExp(null)}
+                  >
+                    <Link to={`/extra/${exp.id}`} state={{ experience: exp }}>
+                      <div className="flex gap-4">
+                        {/* Small preview image */}
+                        <div ref={imgRef} className="w-20 h-20 rounded-lg overflow-hidden bg-[#f5f5f5] flex-shrink-0">
+                          <img
+                            src={exp.image}
+                            alt={exp.title[language]}
+                            className={`w-full h-full object-cover transition-all duration-700 ${
+                              isMobile 
+                                ? (imgInView ? 'grayscale-0' : 'grayscale')
+                                : 'grayscale group-hover:grayscale-0'
+                            }`}
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="experience-title group-hover:text-[#0066ff] transition-colors">
+                            {exp.title[language]}
+                          </h3>
+                          <p className="experience-company">{exp.company}</p>
+                          <div className="flex gap-4 text-sm text-[#1a1a1a]/50">
+                            <span>{exp.period}</span>
+                            <span>{exp.location}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         </div>
@@ -149,12 +266,8 @@ const Skills = ({ language }) => {
           <h2 className="section-title text-center">
             {language === 'en' ? 'Education' : 'Formation'}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { degree: "Master 2 Manager de la Communication", school: "Sup de Com Lyon", year: "2024" },
-              { degree: "Master 1 Marketing Digital & analyse de données", school: "ESB Lyon", year: "2023" },
-              { degree: "Licence Science de gestion - Finance", school: "IHET Tunis", year: "2022" },
-            ].map((edu, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {education.map((edu, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 30 }}
@@ -163,8 +276,12 @@ const Skills = ({ language }) => {
                 className="education-card"
               >
                 <span className="education-year">{edu.year}</span>
-                <h3 className="text-xl font-bold mt-2 mb-1 text-[#1a1a1a]">{edu.degree}</h3>
-                <p className="text-[#1a1a1a]/60">{edu.school}</p>
+                <h3 className="text-lg font-bold mt-2 mb-1 text-[#1a1a1a]">{edu.degree}</h3>
+                <p className="text-[#0066ff] text-sm">{edu.school}</p>
+                <p className="text-[#1a1a1a]/40 text-xs mt-2">{edu.location}</p>
+                {edu.duration && (
+                  <p className="text-[#1a1a1a]/40 text-xs mt-1">{edu.duration}</p>
+                )}
               </motion.div>
             ))}
           </div>

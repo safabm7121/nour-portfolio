@@ -42,8 +42,8 @@ const Cursor = () => {
       
       if (now - lastTime > interval) {
         const randomWord = trailWords[Math.floor(Math.random() * trailWords.length)];
-        setTrail(prev => [...prev.slice(-15), { 
-          x: e.clientX, y: e.clientY, word: randomWord, id: now, opacity: 0.85
+        setTrail(prev => [...prev.slice(-12), { 
+          x: e.clientX, y: e.clientY, word: randomWord, id: now, opacity: 0.5
         }]);
         lastTime = now;
       }
@@ -67,23 +67,45 @@ const Cursor = () => {
   
   return (
     <>
-      <style>{`* { cursor: none !important; }`}</style>
+      <style>{`
+        * {
+          cursor: none !important;
+        }
+        /* Make sure cursor stays above everything */
+        .cursor-dot {
+          z-index: 9999 !important;
+        }
+        .cursor-trail {
+          z-index: 9998 !important;
+        }
+      `}</style>
       
+      {/* Main cursor dot - highest z-index */}
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 pointer-events-none z-50 rounded-full bg-[#0066ff]"
-        style={{ x: cursorXSpring, y: cursorYSpring }}
+        className="fixed top-0 left-0 w-1.5 h-1.5 pointer-events-none rounded-full bg-[#0066ff] cursor-dot"
+        style={{ x: cursorXSpring, y: cursorYSpring, zIndex: 9999 }}
       />
       
+      {/* Trail words - lower opacity */}
       {trail.map((point) => (
         <motion.div
           key={point.id}
-          className="fixed pointer-events-none z-40"
-          style={{ left: point.x, top: point.y, opacity: point.opacity, transform: 'translate(-50%, -50%)', whiteSpace: 'nowrap' }}
+          className="fixed pointer-events-none cursor-trail"
+          style={{ 
+            left: point.x, 
+            top: point.y, 
+            opacity: point.opacity, 
+            transform: 'translate(-50%, -50%)', 
+            whiteSpace: 'nowrap',
+            zIndex: 9998
+          }}
           initial={{ scale: 0.7, y: 0 }}
-          animate={{ scale: 1, y: -12 }}
+          animate={{ scale: 1, y: -10 }}
           transition={{ duration: 0.1 }}
         >
-          <span className="text-[#0066ff]/80 text-[10px] tracking-wider font-mono font-medium">{point.word}</span>
+          <span className="text-[#0066ff]/60 text-[9px] tracking-wider font-mono font-medium">
+            {point.word}
+          </span>
         </motion.div>
       ))}
     </>

@@ -30,12 +30,13 @@ const Navigation = ({ language, setLanguage }) => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           scrolled || mobileMenuOpen ? 'bg-white shadow-sm' : 'bg-transparent'
         }`}
+        style={{ pointerEvents: 'auto' }}
       >
         <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-4 md:py-6 flex items-center justify-between max-w-[1400px] mx-auto">
-          {/* Logo - Blue only on mobile, dark gray on desktop */}
+          {/* Logo */}
           <Link to="/">
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -71,7 +72,7 @@ const Navigation = ({ language, setLanguage }) => {
             </a>
           </div>
           
-          {/* Mobile Menu Button - Blue */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 z-50 hover:bg-[#0066ff]/10 rounded-lg transition-all duration-300"
@@ -84,7 +85,7 @@ const Navigation = ({ language, setLanguage }) => {
         </div>
       </motion.nav>
       
-      {/* Mobile Menu Overlay - Full screen with blue links */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -92,7 +93,7 @@ const Navigation = ({ language, setLanguage }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-white md:hidden"
+            className="fixed inset-0 z-30 bg-white md:hidden"
             style={{ top: '72px' }}
           >
             <div className="flex flex-col items-start justify-start gap-6 p-8 pt-8">

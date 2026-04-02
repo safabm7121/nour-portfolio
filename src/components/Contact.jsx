@@ -29,8 +29,8 @@ const Contact = ({ language }) => {
     formDataToSend.append('_replyto', formData.email);
     
     try {
-      // Use FormSubmit's endpoint with the email in the URL
-      const response = await fetch('https://formsubmit.co/ajax/noureihoudahenmiled0@gmail.com', {
+      // CORRECTED EMAIL: nourelhoudabenmiled0@gmail.com
+      const response = await fetch('https://formsubmit.co/ajax/nourelhoudabenmiled0@gmail.com', {
         method: 'POST',
         body: formDataToSend,
       });
@@ -179,10 +179,10 @@ const Contact = ({ language }) => {
             {language === 'en' ? 'Or reach me directly at:' : 'Ou contactez-moi directement à :'}
           </p>
           <a 
-            href="mailto:noureihoudahenmiled0@gmail.com"
+            href="mailto:nourelhoudabenmiled0@gmail.com"
             className="text-[#0066ff] hover:text-[#0066ff]/80 transition-colors text-lg font-medium"
           >
-            noureihoudahenmiled0@gmail.com
+            nourelhoudabenmiled0@gmail.com
           </a>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-8">

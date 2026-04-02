@@ -1,8 +1,19 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useState, useEffect } from 'react';
 
 const Hero = ({ language }) => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const content = {
     en: {
@@ -95,7 +106,11 @@ const Hero = ({ language }) => {
               <img
                 src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=800"
                 alt="Nour Ben Miled"
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                className={`w-full h-full object-cover transition-all duration-700 ${
+                  isMobile 
+                    ? (inView ? 'grayscale-0' : 'grayscale')
+                    : 'grayscale hover:grayscale-0'
+                }`}
               />
             </div>
           </motion.div>
