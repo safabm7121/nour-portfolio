@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import Lanyard3D from './Lanyard3D';
 
 const Hero = ({ language }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
@@ -86,33 +87,32 @@ const Hero = ({ language }) => {
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.6 }}
             >
-              <a
-                href="#work"
-                className="btn-primary"
-              >
+              <a href="#work" className="btn-primary">
                 {c.cta}
               </a>
             </motion.div>
           </motion.div>
           
-          {/* Right Column - Image */}
+          {/* Right Column - 3D Lanyard Card */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative"
+            className="relative h-[450px] md:h-[550px] lg:h-[650px]"
           >
-            <div className="aspect-square rounded-2xl overflow-hidden bg-[#f5f5f5]">
-              <img
-                src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=800"
-                alt="Nour Ben Miled"
-                className={`w-full h-full object-cover transition-all duration-700 ${
-                  isMobile 
-                    ? (inView ? 'grayscale-0' : 'grayscale')
-                    : 'grayscale hover:grayscale-0'
-                }`}
+            <Suspense fallback={
+              <div className="w-full h-full flex items-center justify-center bg-[#f5f5f5] rounded-2xl">
+                <div className="text-center">
+                  <div className="w-12 h-12 border-4 border-[#0066ff] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                  <p className="text-[#1a1a1a]/60 text-sm">Loading 3D Card...</p>
+                </div>
+              </div>
+            }>
+              <Lanyard3D 
+                position={[0, 0, isMobile ? 25 : 20]} 
+                gravity={[0, -40, 0]} 
               />
-            </div>
+            </Suspense>
           </motion.div>
         </div>
       </div>
