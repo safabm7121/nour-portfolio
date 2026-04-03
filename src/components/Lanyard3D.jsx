@@ -6,52 +6,30 @@ import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphe
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import * as THREE from 'three';
 
-// Import your local files
-import cardGLB from '../assets/lanyard/card.glb';
-import lanyardTexture from '../assets/lanyard/lanyard.png';
+// Use absolute paths from public folder
+const cardGLB = '/lanyard/card.glb';
+const lanyardTexture = '/lanyard/lanyard.png';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
-// Error boundary component
-function ErrorFallback() {
-  return (
-    <div className="w-full h-full flex items-center justify-center bg-[#f5f5f5] rounded-2xl">
-      <div className="text-center p-8">
-        <div className="w-16 h-16 mx-auto mb-4 text-[#0066ff]">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-        </div>
-        <h3 className="text-[#1a1a1a] font-medium mb-2">3D Card Unavailable</h3>
-        <p className="text-[#1a1a1a]/50 text-sm">The 3D model couldn't load. Please check the console.</p>
-      </div>
-    </div>
-  );
-}
+// Preload the GLB file outside the component
+useGLTF.preload(cardGLB);
+useTexture.preload(lanyardTexture);
 
 function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
-  const band = useRef(),
-    fixed = useRef(),
-    j1 = useRef(),
-    j2 = useRef(),
-    j3 = useRef(),
-    card = useRef();
-  const vec = new THREE.Vector3(),
-    ang = new THREE.Vector3(),
-    rot = new THREE.Vector3(),
-    dir = new THREE.Vector3();
+  const band = useRef();
+  const fixed = useRef();
+  const j1 = useRef();
+  const j2 = useRef();
+  const j3 = useRef();
+  const card = useRef();
+  const vec = new THREE.Vector3();
+  const ang = new THREE.Vector3();
+  const rot = new THREE.Vector3();
+  const dir = new THREE.Vector3();
   const segmentProps = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 };
   
-  let nodes, materials;
-  try {
-    const gltf = useGLTF(cardGLB);
-    nodes = gltf.nodes;
-    materials = gltf.materials;
-  } catch (error) {
-    console.error('Failed to load GLB:', error);
-    return null;
-  }
-  
+  const { nodes, materials } = useGLTF(cardGLB);
   const texture = useTexture(lanyardTexture);
   const [curve] = useState(
     () =>
@@ -212,17 +190,43 @@ function LanyardContent({ isMobile }) {
 
 export default function Lanyard3D({ position = [0, 0, 30], gravity = [0, -40, 0], fov = 20, transparent = true }) {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
-  const [hasError, setHasError] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    
+    // Preload the GLB file manually
+    const preloadAssets = async () => {
+      try {
+        const response = await fetch(cardGLB);
+        if (response.ok) {
+          setIsReady(true);
+        } else {
+          // Retry after delay
+          setTimeout(() => setRetryCount(prev => prev + 1), 500);
+        }
+      } catch (error) {
+        setTimeout(() => setRetryCount(prev => prev + 1), 500);
+      }
+    };
+    
+    preloadAssets();
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [retryCount]);
 
-  if (hasError) {
-    return <ErrorFallback />;
-  }
+  // Always show after a short delay or on retry
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="w-full h-full min-h-[500px] relative">
@@ -230,24 +234,28 @@ export default function Lanyard3D({ position = [0, 0, 30], gravity = [0, -40, 0]
         <div className="w-full h-full flex items-center justify-center bg-[#f5f5f5] rounded-2xl">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-[#0066ff] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-[#1a1a1a]/60 text-sm">Loading 3D Card...</p>
+            <p className="text-[#1a1a1a]/60 text-sm">Loading 3D Card... {!isReady && 'Retrying...'}</p>
           </div>
         </div>
       }>
-        <Canvas
-          camera={{ position: position, fov: fov }}
-          dpr={[1, isMobile ? 1.5 : 2]}
-          gl={{ alpha: transparent, preserveDrawingBuffer: false, powerPreference: "high-performance" }}
-          onCreated={({ gl }) => {
-            gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
-          }}
-          onError={(error) => {
-            console.error('Canvas error:', error);
-            setHasError(true);
-          }}
-        >
-          <LanyardContent isMobile={isMobile} />
-        </Canvas>
+        {isReady && (
+          <Canvas
+            key={Date.now()}
+            camera={{ position: position, fov: fov }}
+            dpr={[1, isMobile ? 1.5 : 2]}
+            gl={{ 
+              alpha: transparent, 
+              preserveDrawingBuffer: false, 
+              powerPreference: "high-performance",
+              failIfMajorPerformanceCaveat: false
+            }}
+            onCreated={({ gl }) => {
+              gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
+            }}
+          >
+            <LanyardContent isMobile={isMobile} />
+          </Canvas>
+        )}
       </Suspense>
     </div>
   );
