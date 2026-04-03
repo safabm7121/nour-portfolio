@@ -1,11 +1,23 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 
 const WorkGrid = ({ language }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [isMobile, setIsMobile] = useState(false);
+  const [forceShow, setForceShow] = useState(false);
+  const location = useLocation();
+  
+  // Force re-animate when coming back from project detail
+  useEffect(() => {
+    // Check if we're coming back from a project detail page
+    if (location.state?.fromProject) {
+      setForceShow(true);
+      // Reset after animation
+      setTimeout(() => setForceShow(false), 100);
+    }
+  }, [location]);
   
   useEffect(() => {
     const checkMobile = () => {
@@ -53,7 +65,7 @@ const WorkGrid = ({ language }) => {
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={(inView || forceShow) ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
@@ -69,7 +81,7 @@ const WorkGrid = ({ language }) => {
               exp={exp}
               language={language}
               idx={idx}
-              inView={inView}
+              inView={inView || forceShow}
               isMobile={isMobile}
             />
           ))}
@@ -83,6 +95,11 @@ const WorkGrid = ({ language }) => {
 const MobileColorReveal = ({ exp, language, idx, inView, isMobile }) => {
   const [revealed, setRevealed] = useState(false);
   const cardRef = useRef(null);
+  
+  // Reset revealed state when navigating back
+  useEffect(() => {
+    setRevealed(false);
+  }, [exp.id]);
   
   // Check when the card comes into view on mobile
   useEffect(() => {
@@ -116,7 +133,7 @@ const MobileColorReveal = ({ exp, language, idx, inView, isMobile }) => {
       transition={{ delay: idx * 0.1, duration: 0.5 }}
       className="project-card"
     >
-      <Link to={`/project/${exp.id}`}>
+      <Link to={`/project/${exp.id}`} state={{ fromProject: true }}>
         <div className="relative overflow-hidden mb-4 bg-[#f5f5f5] rounded-xl">
           <img
             src={exp.image}

@@ -17,21 +17,13 @@ const Skills = ({ language }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
   
-  // Create separate inView observers for each extra experience image
-  const [expRefs, setExpRefs] = useState([]);
-  const [expInViews, setExpInViews] = useState([]);
-  
-  useEffect(() => {
-    setExpRefs(expRefs => Array(extraExp.length).fill().map((_, i) => expRefs[i] || null));
-  }, []);
-  
   const skills = [
     "T-REX", "Hubspot", "Mxplorer", "Power BI", "Salesforce",
     "Programmation R", "Google Trends", "Medialand", "Google Analytics",
     "AdExpress", "Pack Office", "Mediapilot"
   ];
   
-  // Extra Experience with behind-the-scenes images
+  // Extra Experience - ONLY add Street Marketing (id: 3) as new
   const extraExp = [
     {
       id: 1,
@@ -43,8 +35,7 @@ const Skills = ({ language }) => {
         en: "Resident and visitor welcome, package and mail management, badge management, event coordination.",
         fr: "Accueil résidents et visiteurs, gestion des colis et courriers, gestion des badges, coordination événementielle."
       },
-      image: "https://media.licdn.com/dms/image/v2/D5622AQH3NN-MRFizcw/feedshare-shrink_800/feedshare-shrink_800/0/1733498978071?e=2147483647&v=beta&t=VlHozAZ1n0UxvRp0utvvqduBFoAbI2skErOn29CcJYA",
-      behindScene: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=800"
+      image: "https://media.licdn.com/dms/image/v2/D5622AQH3NN-MRFizcw/feedshare-shrink_800/feedshare-shrink_800/0/1733498978071?e=2147483647&v=beta&t=VlHozAZ1n0UxvRp0utvvqduBFoAbI2skErOn29CcJYA"
     },
     {
       id: 2,
@@ -56,24 +47,34 @@ const Skills = ({ language }) => {
         en: "Logistics coordination, model coordination, technical setup and event execution.",
         fr: "Coordination logistique, coordination des mannequins, mise en place technique et déroulement du défilé."
       },
-      image: "https://i.postimg.cc/zfj9ShQK/74.jpg",
-      behindScene: "https://images.unsplash.com/photo-1533009199272-35f2b5ce8f9c?w=800"
+      image: "https://i.postimg.cc/zfj9ShQK/74.jpg"
     },
     {
       id: 3,
+      title: { en: "Street Marketing", fr: "Street Marketing" },
+      company: "Ville de Lyon | La Belle Equipe",
+      period: "Sept 2024 - Oct 2024",
+      location: "Lyon, France",
+      description: {
+        en: "Participatory budget campaign for the City of Lyon. Engaged with citizens to promote community initiatives and encourage participation in local decision making.",
+        fr: "Campagne de budget participatif pour la Ville de Lyon. Engagement des citoyens pour promouvoir les initiatives communautaires et encourager la participation à la prise de décision locale."
+      },
+      image: "https://media.licdn.com/dms/image/v2/D5622AQH3NN-MRFizcw/feedshare-shrink_800/feedshare-shrink_800/0/1733498978071?e=2147483647&v=beta&t=VlHozAZ1n0UxvRp0utvvqduBFoAbI2skErOn29CcJYA"
+    },
+    {
+      id: 4,
       title: { en: "Communication Assistant", fr: "Assistante en communication" },
-      company: "LA FLAMME paris",
+      company: "LA FLAMME Paris",
       period: "Avr 2023 - Sept 2023",
       location: "Tunis, Tunisie",
       description: {
         en: "Internal communication (mailing), social media monitoring, social media planning.",
         fr: "Communication interne (mailing), suivi des mentions sur les réseaux, planification social media."
       },
-      image: "https://lh3.googleusercontent.com/p/AF1QipMpaNAT1J3rd6CEeijtA8suhaPYURqy4YvlCccB=s1360-w1360-h1020-rw",
-      behindScene: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800"
+      image: "https://lh3.googleusercontent.com/p/AF1QipMpaNAT1J3rd6CEeijtA8suhaPYURqy4YvlCccB=s1360-w1360-h1020-rw"
     },
     {
-      id: 4,
+      id: 5,
       title: { en: "Community Manager", fr: "Community Manager" },
       company: "TUNIVISION IHET",
       period: "Jan 2021 - Août 2021",
@@ -82,11 +83,10 @@ const Skills = ({ language }) => {
         en: "Social media caption writing, brainstorming and event planning (Christmas market, Valentine's Day, etc.).",
         fr: "Rédaction des légendes pour les réseaux, brainstorming et planification des événements (marché de Noël, Saint-Valentin, etc.)."
       },
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUKuWTh3uSqCvVbNW2VW21dcTG9Qarin4gJg&s",
-      behindScene: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800"
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUKuWTh3uSqCvVbNW2VW21dcTG9Qarin4gJg&s"
     },
     {
-      id: 5,
+      id: 6,
       title: { en: "Project Manager", fr: "Chef de projet" },
       company: "ENACTUS",
       period: "Oct 2019 - Août 2020",
@@ -95,12 +95,10 @@ const Skills = ({ language }) => {
         en: "Project brainstorming (Project: BASMA), competitive monitoring, content creation.",
         fr: "Brainstorming projet (Projet: BASMA), veille concurrentielle, création de contenu."
       },
-      image: "https://www.tustex.com/sites/default/files//styles/large/public/field/image/encatus.jpg?itok=Binyty9n",
-      behindScene: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800"
+      image: "https://www.tustex.com/sites/default/files//styles/large/public/field/image/encatus.jpg?itok=Binyty9n"
     }
   ];
   
-  // Education from PDF
   const education = [
     { 
       degree: "Master 2 Manager de la Communication", 
@@ -199,7 +197,7 @@ const Skills = ({ language }) => {
             </div>
           </motion.div>
           
-          {/* Right Column - Extra Experience with Behind Scene Images */}
+          {/* Right Column - Extra Experience */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -210,7 +208,6 @@ const Skills = ({ language }) => {
             </h2>
             <div className="space-y-8">
               {extraExp.map((exp, idx) => {
-                // eslint-disable-next-line react-hooks/rules-of-hooks
                 const [imgRef, imgInView] = useInView({ triggerOnce: true, threshold: 0.3 });
                 
                 return (
@@ -225,7 +222,6 @@ const Skills = ({ language }) => {
                   >
                     <Link to={`/extra/${exp.id}`} state={{ experience: exp }}>
                       <div className="flex gap-4">
-                        {/* Small preview image */}
                         <div ref={imgRef} className="w-20 h-20 rounded-lg overflow-hidden bg-[#f5f5f5] flex-shrink-0">
                           <img
                             src={exp.image}
