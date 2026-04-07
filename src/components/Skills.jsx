@@ -3,6 +3,9 @@ import { useInView } from 'react-intersection-observer';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+// Import graduation image
+import graduation from '../assets/images/graduation.JPG';
+
 const Skills = ({ language }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [hoveredExp, setHoveredExp] = useState(null);
@@ -252,7 +255,7 @@ const Skills = ({ language }) => {
           </motion.div>
         </div>
         
-        {/* Education Section */}
+        {/* Education Section with Graduation Image */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -281,6 +284,22 @@ const Skills = ({ language }) => {
               </motion.div>
             ))}
           </div>
+          
+          {/* Graduation Image */}
+         <motion.div
+  initial={{ opacity: 0, y: 30 }}
+  animate={inView ? { opacity: 1, y: 0 } : {}}
+  transition={{ delay: 0.8 }}
+  className="mt-12 max-w-md mx-auto"
+>
+  <div className="relative overflow-hidden rounded-xl bg-[#f5f5f5] aspect-[3/4]">
+    <img
+      src={graduation}
+      alt="Graduation ceremony - Sup de Com Lyon"
+      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+    />
+  </div>
+</motion.div>
         </motion.div>
       </div>
     </section>
