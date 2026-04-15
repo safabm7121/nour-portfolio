@@ -11,17 +11,16 @@ const WorkGrid = ({ language }) => {
   
   // Force re-animate when coming back from project detail
   useEffect(() => {
-    // Check if we're coming back from a project detail page
     if (location.state?.fromProject) {
       setForceShow(true);
-      // Reset after animation
       setTimeout(() => setForceShow(false), 100);
     }
   }, [location]);
   
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      // Changed from 768 to 1024 to include iPads and tablets
+      setIsMobile(window.innerWidth < 1024);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -96,12 +95,10 @@ const MobileColorReveal = ({ exp, language, idx, inView, isMobile }) => {
   const [revealed, setRevealed] = useState(false);
   const cardRef = useRef(null);
   
-  // Reset revealed state when navigating back
   useEffect(() => {
     setRevealed(false);
   }, [exp.id]);
   
-  // Check when the card comes into view on mobile
   useEffect(() => {
     if (!isMobile) return;
     
@@ -140,8 +137,6 @@ const MobileColorReveal = ({ exp, language, idx, inView, isMobile }) => {
             alt={exp.title[language]}
             className="project-image"
             style={{
-              // Mobile: when revealed, show color; otherwise grayscale
-              // Desktop: CSS hover handles it (no inline style interference)
               filter: isMobile && revealed ? 'grayscale(0%)' : undefined,
             }}
           />
