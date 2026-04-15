@@ -4,10 +4,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 const Cursor = () => {
   const [isDesktop, setIsDesktop] = useState(false);
   const [trail, setTrail] = useState([]);
-  const cursorX = useMotionValue(0);
-  const cursorY = useMotionValue(0);
-  const cursorXSpring = useSpring(cursorX, { damping: 20, stiffness: 400 });
-  const cursorYSpring = useSpring(cursorY, { damping: 20, stiffness: 400 });
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   
   const trailWords = ["RADIO", "PLANNING", "MEDIA", "M6", "HAVAS", "TV", "AUDIENCE", "CAMPAIGN"];
   
@@ -37,8 +34,7 @@ const Cursor = () => {
     
     const moveCursor = (e) => {
       const now = Date.now();
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+      setMousePos({ x: e.clientX, y: e.clientY });
       
       if (now - lastTime > interval) {
         const randomWord = trailWords[Math.floor(Math.random() * trailWords.length)];
@@ -51,7 +47,7 @@ const Cursor = () => {
     
     window.addEventListener('mousemove', moveCursor);
     return () => window.removeEventListener('mousemove', moveCursor);
-  }, [isDesktop, cursorX, cursorY]);
+  }, [isDesktop]);
   
   useEffect(() => {
     if (!isDesktop) return;
@@ -71,7 +67,6 @@ const Cursor = () => {
         * {
           cursor: none !important;
         }
-        /* Make sure cursor stays above everything */
         .cursor-dot {
           z-index: 9999 !important;
         }
@@ -80,13 +75,15 @@ const Cursor = () => {
         }
       `}</style>
       
-      {/* Main cursor dot - highest z-index */}
+      {/* Main cursor dot - no spring, direct position */}
       <motion.div
         className="fixed top-0 left-0 w-1.5 h-1.5 pointer-events-none rounded-full bg-[#0066ff] cursor-dot"
-        style={{ x: cursorXSpring, y: cursorYSpring, zIndex: 9999 }}
+        animate={{ x: mousePos.x - 3, y: mousePos.y - 3 }}
+        transition={{ duration: 0, ease: "linear" }}
+        style={{ zIndex: 9999 }}
       />
       
-      {/* Trail words - lower opacity */}
+      {/* Trail words */}
       {trail.map((point) => (
         <motion.div
           key={point.id}

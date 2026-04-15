@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 
+// Import the PDF from assets/cv folder
+import cvPDF from '../assets/cv/resume-nour-ben-miled.pdf';
+
 const Navigation = ({ language, setLanguage }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -64,8 +67,8 @@ const Navigation = ({ language, setLanguage }) => {
             </button>
             
             <a
-              href="/resume-nour-ben-miled.pdf"
-              download
+              href={cvPDF}
+              download="Nour_Ben_Miled_CV.pdf"
               className="btn-primary"
             >
               CV
@@ -119,8 +122,8 @@ const Navigation = ({ language, setLanguage }) => {
               </button>
               
               <a
-                href="/resume-nour-ben-miled.pdf"
-                download
+                href={cvPDF}
+                download="Nour_Ben_Miled_CV.pdf"
                 className="btn-primary mt-4 inline-block"
                 onClick={() => setMobileMenuOpen(false)}
               >
