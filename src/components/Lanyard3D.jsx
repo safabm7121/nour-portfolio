@@ -134,14 +134,14 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
       <mesh ref={band}>
         <meshLineGeometry />
         <meshLineMaterial
-          color="white"
-          depthTest={false}
-          resolution={isMobile ? [1000, 2000] : [1000, 1000]}
-          useMap
-          map={texture}
-          repeat={[-4, 1]}
-          lineWidth={1}
-        />
+  color="black"
+  depthTest={false}
+  resolution={isMobile ? [1000, 2000] : [1000, 1000]}
+  useMap
+  map={texture}
+  repeat={[-4, 1]}
+  lineWidth={1}
+/>
       </mesh>
     </>
   );
