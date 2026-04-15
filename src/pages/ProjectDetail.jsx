@@ -5,7 +5,7 @@ import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
 // M6 - Offer Optimization Manager (ID 1)
 import m6_offer_1 from '../assets/images/M6 1.jpg';
 import m6_offer_2 from '../assets/images/m6 2.JPG';
-import m6_offer_3 from '../assets/images/M6 3.JPG';
+
 import m6_offer_4 from '../assets/images/M6 4.JPG';
 import m6_offer_5 from '../assets/images/M6 5.JPG';
 
@@ -87,7 +87,7 @@ const ProjectDetail = ({ language }) => {
           en: "Management and optimization of the advertising screen grid for PTNT (W9 and 6TER). Audience analysis and advertising screen pricing. Monitoring advertising time and establishing forecasts for upcoming weeks. Distribution of grids to the market at S-2.",
           fr: "Gestion et optimisation de la grille des écrans publicitaires pour PTNT (W9 et 6TER). Analyses des audiences et tarification des écrans publicitaires. Suivi du temps de publicité et établissement des prévisions pour les semaines à venir. Diffusion des grilles auprès du marché à S-2."
         },
-        images: [m6_offer_1, m6_offer_2, m6_offer_3, m6_offer_4, m6_offer_5]
+        images: [m6_offer_1, m6_offer_2, m6_offer_4, m6_offer_5]
       },
       2: {
         title: { en: "Radio Planning Manager", fr: "Chargée de Planning Radio" },
